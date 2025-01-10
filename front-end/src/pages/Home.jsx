@@ -98,6 +98,7 @@ const Home = () => {
               />
             )}
           </div>
+          <p className="text-sm text-gray-600 flex items-center gap-1 mt-1"><img src={info} className="w-3 h-3" />Security PIN should be 6 digit number</p>
         </div>
         <button
           onClick={handleVerify}
