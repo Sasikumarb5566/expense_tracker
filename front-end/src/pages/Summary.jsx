@@ -9,6 +9,7 @@ const Summary = () => {
   }
   return (
     <div className="flex flex-col gap-6 justify-center items-center h-screen">
+      <button className="text-center w-1/3 h-10 rounded-lg border-2">Add People</button>
       <div className="md:w-1/3 shadow-xl rounded-xl p-3 w-5/6">
         <div className="flex items-center gap-2 cursor-pointer hover:underline" onClick={handleDetails}>
           <p className="font-semibold text-start text-lg md:ml-11 ml-5">
