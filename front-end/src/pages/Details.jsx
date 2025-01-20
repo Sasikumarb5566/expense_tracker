@@ -5,6 +5,10 @@ import cancel from "../assets/cancel.png";
 
 const Details = () => {
   const [openForm, setOpenForm] = useState(null);
+  const[formData, setFormData] = useState({
+    amount: '',
+    reason: ""
+  })
   const navigate = useNavigate();
   const date = new Date();
   const formatDate = (date) => {
@@ -23,9 +27,17 @@ const Details = () => {
   const handleForm = (inOrOut) => {
     setOpenForm(inOrOut);
   };
+
   const handleCancel = () => {
     setOpenForm(null);
   };
+
+  const handleSave = () => {
+    console.log(formData.reason +"    "+formData.amount)
+    setOpenForm(null);
+    formData.reason = ''
+    formData.amount =''
+  }
 
   return (
     <div className="relative h-screen">
@@ -98,6 +110,8 @@ const Details = () => {
               type="text"
               placeholder="Type Something..."
               className="rounded-md p-1 border-2"
+              value={formData.reason}
+              onChange={(e) => {setFormData((prev) => ({...prev, reason: e.target.value}))}}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -106,9 +120,11 @@ const Details = () => {
               type="number"
               placeholder="0"
               className="rounded-md p-1 border-2"
+              value={formData.amount}
+              onChange={(e) => {setFormData((prev) => ({...prev, amount: e.target.value}))}}
             />
           </div>
-          <button className={`h-10 text-white rounded-md ${openForm == "in" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}>
+          <button className={`h-10 text-white rounded-md ${openForm == "in" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`} onClick={handleSave}>
             Save
           </button>
         </div>
