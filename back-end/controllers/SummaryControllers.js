@@ -28,3 +28,13 @@ module.exports.getAllUsers = async(req, res) => {
     return res.json({data: false, msg: "Something went wrong"})
   }
 }
+
+module.exports.getIndividualDetails = async(req, res) => {
+  const {user_id} = req.query;
+  try {
+    const details = await Details.findOne({ user_id });
+    return res.json({data: true, detail: details})
+  } catch(err) {
+    return res.json({data: false, msg:"Something went wrong"})
+  }
+}

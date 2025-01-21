@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import right_arrow from "../assets/right_arrow.png";
-import { useActionData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { addUser, fetchAllUsers } from "../services/SummaryServices";
+import { addUser, fetchAllUsers, getIndividualDetails } from "../services/SummaryServices";
 
 const Summary = () => {
   const [openName, setOpenName] = useState(false);
   const [user, setUser] = useState([]);
   const [name, setName] = useState();
   const navigate = useNavigate();
-  const handleDetails = () => {
-    navigate("/details");
+
+  const handleDetails = async(id) => {
+    navigate('/details', {state: {id}});
   };
+  
   const handleAddPeople = () => {
     setOpenName(!openName);
   };
@@ -70,7 +72,7 @@ const Summary = () => {
           <div className="md:w-1/3 shadow-xl rounded-xl p-3 w-5/6" key={person._id}>
             <div
               className="flex items-center gap-2 cursor-pointer hover:underline"
-              onClick={handleDetails}
+              onClick={() =>handleDetails(person._id)}
             >
               <p className="font-semibold text-start text-lg md:ml-11 ml-5">
                 {person.name}

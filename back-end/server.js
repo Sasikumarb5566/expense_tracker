@@ -8,6 +8,7 @@ const app = express();
 const addSummaryUser = require('./routes/SummaryRoutes');
 const getAllUsers = require('./routes/SummaryRoutes');
 const addDetails = require('./routes/DetailsRoutes');
+const getIndividualDetails = require('./routes/SummaryRoutes')
 
 app.use(cors())
 app.use(express.json())
@@ -18,7 +19,8 @@ connectDB();
 
 app.use('/add', addSummaryUser)
 app.use('/get', getAllUsers)
-app.use('/desc', addDetails)
+app.use('/add', addDetails)
+app.use('/get', getIndividualDetails)
 
 app.listen(port, ()=> {
     console.log("Server listening on port ", port)

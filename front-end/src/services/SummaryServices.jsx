@@ -10,5 +10,9 @@ export const fetchAllUsers = async() => {
 }
 
 export const addDetails = async(details) => {
-    return axios.post(`${baseUrl}/desc/details`, details)
+    return axios.post(`${baseUrl}/add/details`, details)
+}
+
+export const getIndividualDetails = async(id) => {
+    return axios.get(`${baseUrl}/get/details`,{params: {user_id: id}})
 }

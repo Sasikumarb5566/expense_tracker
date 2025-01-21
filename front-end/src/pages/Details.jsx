@@ -1,21 +1,23 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import cancel from "../assets/cancel.png";
-import { addDetails } from "../services/SummaryServices";
+import { addDetails, getIndividualDetails } from "../services/SummaryServices";
 
 const Details = () => {
+  const location = useLocation();
+  const { id } = location.state || {}; 
   const [openForm, setOpenForm] = useState(null);
   const[formData, setFormData] = useState({
-    user_id: '',
+    user_id: id,
     outOrIn: '',
     amount: '',
     reason: ""
   })
-  const navigate = useNavigate();
-  const date = new Date();
-  const formatDate = (date) => {
-    return date.toLocaleString("en-IN", {
+  const [fetchedData, setFecthedData] = useState();
+  const convertTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -24,8 +26,30 @@ const Details = () => {
       second: "2-digit",
       hour12: true,
       timeZone: "Asia/Kolkata",
-    });
+    };
+  
+    const formattedDate = date.toLocaleString("en-IN", options);
+    return formattedDate.replace(",", "").replace(/\//g, "-");
   };
+  useEffect(() => {
+    const fetchDetails = async() => {
+      try {
+        const response = await getIndividualDetails(id);
+        const data = response.data;
+        if(data.data) {
+          setFecthedData(data.detail)
+          //console.log(fetchedData);
+        } else {
+          console.log(data.msg);
+        }
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    fetchDetails();
+
+
+  })
 
   const handleForm = (inOrOut) => {
     setOpenForm(inOrOut);
@@ -44,6 +68,7 @@ const Details = () => {
       const response = await addDetails(formData);
       const data = response.data;
       if(data.data) {
+        console.log(data.details)
         setOpenForm(null);
         formData.reason = ''
         formData.amount =''
@@ -76,7 +101,7 @@ const Details = () => {
           </div>
           <div>
             <p className="font-semibold">Balance</p>
-            <p className="text-center text-red-600">-400</p>
+            <p className="text-center">-400</p>
           </div>
         </div>
         <hr className="w-full mt-3" />
@@ -90,16 +115,19 @@ const Details = () => {
           </div>
         </div>
         <hr className="w-full" />
-        <div className="flex md:justify-around w-full md:w-3/4 py-2">
-          <div className="md:w-1/2 w-3/4 px-5">
-            <p>Washing Soap</p>
-            <p className=" text-gray-500">{formatDate(date)}</p>
-          </div>
-          <div className="flex justify-between w-1/4">
-            <div className="w-1/2">50</div>
-            <div className="w-1/2">100</div>
-          </div>
-        </div>
+        {fetchedData &&
+          fetchedData.logs.map((log, index) => (
+            <div key={index} className="flex md:justify-around w-full md:w-3/4 py-2 overflow-y-scroll">
+              <div className="md:w-1/2 w-3/4 px-5">
+                <p>{log.reason}</p>
+                <p className="text-gray-500">{convertTimestamp(log.date)}</p>
+              </div>
+              <div className="flex justify-between w-1/4">
+                <div className="w-1/2">{log.in || '-'}</div>
+                <div className="w-1/2">{log.out || '-'}</div>
+              </div>
+            </div>
+          ))}
         <div className="absolute bottom-2 justify-between flex md:w-3/4 h-12 text-white gap-2 w-full">
           <button
             className="md:w-1/2 bg-green-600 hover:bg-green-700 rounded-md w-full ml-2"
