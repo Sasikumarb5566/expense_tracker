@@ -2,10 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import cancel from "../assets/cancel.png";
+import { addDetails } from "../services/SummaryServices";
 
 const Details = () => {
   const [openForm, setOpenForm] = useState(null);
   const[formData, setFormData] = useState({
+    user_id: '',
+    outOrIn: '',
     amount: '',
     reason: ""
   })
@@ -26,17 +29,30 @@ const Details = () => {
 
   const handleForm = (inOrOut) => {
     setOpenForm(inOrOut);
+    setFormData((prev) => ({
+      ...prev, outOrIn: inOrOut
+    }))
   };
 
   const handleCancel = () => {
     setOpenForm(null);
   };
 
-  const handleSave = () => {
-    console.log(formData.reason +"    "+formData.amount)
-    setOpenForm(null);
-    formData.reason = ''
-    formData.amount =''
+  const handleSave = async(e) => {
+    e.preventDefault();
+    try {
+      const response = await addDetails(formData);
+      const data = response.data;
+      if(data.data) {
+        setOpenForm(null);
+        formData.reason = ''
+        formData.amount =''
+      } else {
+        console.log(data.msg);
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   return (
