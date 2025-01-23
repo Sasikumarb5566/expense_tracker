@@ -33,7 +33,8 @@ module.exports.getIndividualDetails = async(req, res) => {
   const {user_id} = req.query;
   try {
     const details = await Details.findOne({ user_id });
-    return res.json({data: true, detail: details})
+    const users = await User.findById(user_id);
+    return res.json({data: true, detail: details, user: users})
   } catch(err) {
     return res.json({data: false, msg:"Something went wrong"})
   }

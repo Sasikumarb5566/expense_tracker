@@ -25,7 +25,7 @@ const Summary = () => {
         const response = await addUser(name);
         const data = response.data;
         if (data.data) {
-          console.log("User Added Successfully");
+          //console.log("User Added Successfully");
           setOpenName(!openName);
           setName(null);
         } else {
@@ -50,34 +50,41 @@ const Summary = () => {
     fetchUsers();
   });
   return (
-    <div className="flex flex-col gap-6 justify-center items-center h-screen">
-      {openName && (
-        <input
-          type="text"
-          className=" w-5/6 md:w-1/3 border-blue-600 border-2 h-10 rounded-lg p-2"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      )}
-      <button
-        className={`text-center w-5/6 md:w-1/3 h-10 rounded-lg border-2 border-gray-600 ${
-          openName ? "bg-blue-600 text-white border-none" : ""
-        }`}
-        onClick={openName ? handleSavePeople : handleAddPeople}
-      >
-        {openName ? "Save" : "Add People"}
-      </button>
-      {user.map((person) => (
-          <div className="md:w-1/3 shadow-xl rounded-xl p-3 w-5/6" key={person._id}>
+    <div className="flex flex-col items-center h-screen">
+      <div className="w-full bg-white shadow-md  p-4 sticky top-0 z-10 flex flex-col items-center">
+        {openName && (
+          <input
+            type="text"
+            className="w-5/6 md:w-1/3 border-blue-600 border-2 h-10 rounded-lg p-2"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        )}
+        <button
+          className={`text-center w-5/6 md:w-1/3 h-10 rounded-lg border-2 border-gray-600 mt-3 ${
+            openName ? "bg-blue-600 text-white border-none" : ""
+          }`}
+          onClick={openName ? handleSavePeople : handleAddPeople}
+        >
+          {openName ? "Save" : "Add People"}
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto w-full flex flex-col items-center mt-4">
+        {user.map((person) => (
+          <div
+            className="md:w-1/3 shadow-xl rounded-xl p-3 w-5/6 mb-4"
+            key={person._id}
+          >
             <div
               className="flex items-center gap-2 cursor-pointer hover:underline"
-              onClick={() =>handleDetails(person._id)}
+              onClick={() => handleDetails(person._id)}
             >
               <p className="font-semibold text-start text-lg md:ml-11 ml-5">
                 {person.name}
               </p>
-              <img src={right_arrow} className="w-3 h-3" />
+              <img src={right_arrow} className="w-3 h-3" alt="arrow" />
             </div>
             <hr className="mt-2" />
             <div className="flex justify-around mt-4">
@@ -95,7 +102,8 @@ const Summary = () => {
               </div>
             </div>
           </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
