@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl =  'http://localhost:5051'
+const baseUrl =  'https://expense-tracker-three-wheat.vercel.app'
 
 export const addUser = async(name) => {
     return axios.post(`${baseUrl}/add/summaryuser`, {user: name})
